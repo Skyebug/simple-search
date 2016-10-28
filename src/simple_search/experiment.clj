@@ -8,7 +8,7 @@
         simple-search.knapsack-examples.knapPI_16_200_1000))
 
 (defn run-experiment
-  [searchers problems num-replications max-evals]
+  [searchers problems num-replications max-evals mutation-rate]
   (println "Search_method Problem Max_evals Run Score")
   (for [searcher searchers
         p problems
@@ -19,12 +19,13 @@
       ; The `send` says to evaluate `(searcher p max-evals)` in another
       ; thread when convenient, and replace the old value of the answer
       ; (marked by the placeholder argument `_`) with that new value.
-      (send answer (fn [_] (searcher p max-evals)))
+      (send answer (fn [_] (searcher p max-evals mutation-rate)))
       {:searcher searcher
        :problem p
        :max-evals max-evals
        :run-number n
-       :answer answer})))
+       :answer answer
+       :mutation-rate mutation-rate})))
 
 (defn print-experimental-results
   [results]
@@ -35,6 +36,7 @@
              (:label (:problem result))
              (:max-evals result)
              (:run-number result)
+             (:mutation-rate result)
              (long (:score @(:answer result))))))
 
 ;; This really shouldn't be necessary, as I should have included the labels
@@ -60,7 +62,7 @@
   where you replace 30 and 1000 with the desired number of repetitions
   and maximum answers.
   "
-  [num-repetitions max-answers]
+  [num-repetitions max-answers mutation-rate]
   ; This is necessary to "move" us into this namespace. Otherwise we'll
   ; be in the "user" namespace, and the references to the problems won't
   ; resolve propertly.
@@ -72,12 +74,14 @@
                     (with-meta
                       (partial core/hill-climber core/mutate-answer core/penalized-score)
                       {:label "hill_climber_penalized_score"})
-                    (with-meta (partial core/random-search core/score)
-                      {:label "random_search"})]
+                    ;(with-meta (partial core/random-search core/score)
+                     ; {:label "random_search"})]
+                    ]
                    (map get-labelled-problem
                         ["knapPI_11_20_1000_4" "knapPI_13_20_1000_4" "knapPI_16_20_1000_4"
                          "knapPI_11_200_1000_4" "knapPI_13_200_1000_4" "knapPI_16_200_1000_4"])
                    (Integer/parseInt num-repetitions)
-                   (Integer/parseInt max-answers)))
+                   (Integer/parseInt max-answers)
+                   (Integer/parseInt mutation-rate)))
   (shutdown-agents))
 
