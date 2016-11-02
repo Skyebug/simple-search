@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"MutateRate\"\noutput: pdf_document\n---\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\n```\n\n## R Markdown\n\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.\n\nWhen you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\n\n```\nknapPI_20_allP <- read.csv(\"../Labs/AI/simple-search/data/knapPI_20_allP\", sep=\"\")\nknapPI_20_allP$non_neg = ifelse(knapPI_20_allP$X0.1<0,0,knapPI_20_allP$X0.1)\nknapPI_200_allP <- read.csv(\"../Labs/AI/simple-search/data/knapPI_200_allP\", sep=\"\")\nknapPI_200_allP$non_neg = ifelse(knapPI_200_allP$X0.1<0,0,knapPI_200_allP$X0.1)\n```\n\n\n## Including Plots\n\nYou can also embed plots, for example:\n\n```{r pressure, echo=FALSE}\nboxplot(knapPI_20_allP$non_neg ~ knapPI_20_allP$X1, names=c(\"5%\", \"10%\", \"25%\", \"50%\", \"100%\"))\nboxplot(knapPI_200_allP$non_neg ~ knapPI_200_allP$X10, names=c(\"5%\", \"10%\", \"25%\", \"50%\", \"100%\"))\n\n```\n\n",
+    "created" : 1478102860345.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3123365936",
+    "id" : "277AC22D",
+    "lastKnownWriteTime" : 1478104957,
+    "last_content_update" : 1478104957297,
+    "path" : "~/MutateRate/MutateRate.Rmd",
+    "project_path" : "MutateRate.Rmd",
+    "properties" : {
+        "docOutlineVisible" : "0",
+        "source_window_id" : "",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

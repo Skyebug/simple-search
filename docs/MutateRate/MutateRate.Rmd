@@ -1,0 +1,33 @@
+---
+title: "MutateRate"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```
+knapPI_20_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_20_allP", sep="")
+knapPI_20_allP$non_neg = ifelse(knapPI_20_allP$X0.1<0,0,knapPI_20_allP$X0.1)
+knapPI_200_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_200_allP", sep="")
+knapPI_200_allP$non_neg = ifelse(knapPI_200_allP$X0.1<0,0,knapPI_200_allP$X0.1)
+```
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+boxplot(knapPI_20_allP$non_neg ~ knapPI_20_allP$X1, names=c("5%", "10%", "25%", "50%", "100%"))
+boxplot(knapPI_200_allP$non_neg ~ knapPI_200_allP$X10, names=c("5%", "10%", "25%", "50%", "100%"))
+
+```
+

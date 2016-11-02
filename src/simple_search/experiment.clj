@@ -1,8 +1,8 @@
 (ns simple-search.experiment
   (:require [simple-search.core :as core])
-  (:use simple-search.knapsack-examples.knapPI_11_20_1000
-        simple-search.knapsack-examples.knapPI_13_20_1000
-        simple-search.knapsack-examples.knapPI_16_20_1000
+  (:use ;simple-search.knapsack-examples.knapPI_11_20_1000
+        ;simple-search.knapsack-examples.knapPI_13_20_1000
+        ;simple-search.knapsack-examples.knapPI_16_20_1000
         simple-search.knapsack-examples.knapPI_11_200_1000
         simple-search.knapsack-examples.knapPI_13_200_1000
         simple-search.knapsack-examples.knapPI_16_200_1000))
@@ -78,7 +78,7 @@
                      ; {:label "random_search"})]
                     ]
                    (map get-labelled-problem
-                        ["knapPI_11_20_1000_4" "knapPI_13_20_1000_4" "knapPI_16_20_1000_4"
+                        [;"knapPI_11_20_1000_4" "knapPI_13_20_1000_4" "knapPI_16_20_1000_4"])
                          "knapPI_11_200_1000_4" "knapPI_13_200_1000_4" "knapPI_16_200_1000_4"])
                    (Integer/parseInt num-repetitions)
                    (Integer/parseInt max-answers)
