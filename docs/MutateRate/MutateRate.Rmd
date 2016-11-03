@@ -1,5 +1,6 @@
 ---
 title: "MutateRate"
+author: Skye Antinozzi and Mitchell Finzel
 output: pdf_document
 ---
 
@@ -7,27 +8,33 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```
+```{r, echo=FALSE}
 knapPI_20_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_20_allP", sep="")
-knapPI_20_allP$non_neg = ifelse(knapPI_20_allP$X0.1<0,0,knapPI_20_allP$X0.1)
-knapPI_200_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_200_allP", sep="")
-knapPI_200_allP$non_neg = ifelse(knapPI_200_allP$X0.1<0,0,knapPI_200_allP$X0.1)
+knapPI_20_allP$non_neg = ifelse(knapPI_20_allP$X1320<0,0,knapPI_20_allP$X1320)
 ```
+<!--knapPI_200_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_200_allP", sep="")
+knapPI_200_allP$non_neg = ifelse(knapPI_200_allP$X0.1<0,0,knapPI_200_allP$X0.1)-->
 
 
-## Including Plots
+##Setup
+We chose to look at how mutation rate affects score by providing mutation rate as a commandline argument. This example uses knapsack item sets of 20 with percentages of the total item size 5,10,25,50 and 100 percents.
 
-You can also embed plots, for example:
+---
 
 ```{r pressure, echo=FALSE}
-boxplot(knapPI_20_allP$non_neg ~ knapPI_20_allP$X1, names=c("5%", "10%", "25%", "50%", "100%"))
-boxplot(knapPI_200_allP$non_neg ~ knapPI_200_allP$X10, names=c("5%", "10%", "25%", "50%", "100%"))
-
+boxplot(knapPI_20_allP$non_neg ~ knapPI_20_allP$X1, names=c("5%", "10%", "25%", "50%", "100%"),main="20 Items",xlab="Mutation Rate (% of items)", ylab="Score")
 ```
+
+---
+
+##Results
+As can be seen in the boxplots the mutation rate didn't have much effect between 5% and 25%. At 50% however a large drop in mean score occurs with 100% mutation rate, essentially randomized, having no score above 0. At 50% of the item set size the score begins to approach 0, because this is penalized score the scores are becoming more negative.
+
+
+##Future Work
+We would like to test a finer mutation rate gradient between 25% and 100% to see when the decline in score begins to slope more harshly. We would like to replicate our process with larger item set knapsack problems as well.
+
+<!--```{r,echo=FALSE}
+boxplot(knapPI_200_allP$X0.1 ~ knapPI_200_allP$X10, names=c("5%", "10%", "25%", "50%", "100%"), main="200 Items")
+```-->
 
