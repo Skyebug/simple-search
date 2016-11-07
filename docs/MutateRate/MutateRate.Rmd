@@ -12,12 +12,22 @@ knitr::opts_chunk$set(echo = TRUE)
 knapPI_20_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_20_allP", sep="")
 knapPI_20_allP$non_neg = ifelse(knapPI_20_allP$X1320<0,0,knapPI_20_allP$X1320)
 ```
-<!--knapPI_200_allP <- read.csv("../Labs/AI/simple-search/data/knapPI_200_allP", sep="")
-knapPI_200_allP$non_neg = ifelse(knapPI_200_allP$X0.1<0,0,knapPI_200_allP$X0.1)-->
-
 
 ##Setup
-We chose to look at how mutation rate affects score by providing mutation rate as a commandline argument. This example uses knapsack item sets of 20 with percentages of the total item size 5,10,25,50 and 100 percents.
+We chose to look at how mutation rate affects score by providing mutation rate as a commandline argument. For our data gathering we used the following knapsack problems 
+* knapPI_11_20_1000_4
+* knapPI_13_20_1000_4
+* knapPI_16_20_1000_4
+
+with 1000 max evaluations and 30 runs for each knapsack experiment on the specified mutation rate. We used 5%, 10%, 25%, 50%, and 100% of knapsack item count to determine the mutation rate for each item. For example, given an item with a 10% mutation rate there would be a 1 in 10 chance of flipping the bit (including/discluding that item in the knapsack). This means that at a 100% mutation rate every bit is flipped every time that the knapsack is mutated.
+
+Our code currently doesn't compute the percentage and therefore requires the percentage to be computed beforehand. For instance, if we wanted to have a 10% mutation rate on a item size of 20 we would input 2 as the final commandline argument. Below is an example of how to run an experiment with the specified mutation rate of 2 (or 10%).
+
+`lein run -m simple-search.experiment 30 1000 2`
+
+We ran each experiment with only one search/scoring mechanism, hill_climber_penalized_score, and saved the results in individual text files that we later concatenated into our overall data file named knapPI_20_allP.
+
+After loading the data into RStudio we added a new column named non_neg that takes the original scores and replaces all negative scores with 0's. This was done to allow the plots to be more visually pleasing.
 
 ---
 
@@ -27,14 +37,25 @@ boxplot(knapPI_20_allP$non_neg ~ knapPI_20_allP$X1, names=c("5%", "10%", "25%", 
 
 ---
 
-##Results
-As can be seen in the boxplots the mutation rate didn't have much effect between 5% and 25%. At 50% however a large drop in mean score occurs with 100% mutation rate, essentially randomized, having no score above 0. At 50% of the item set size the score begins to approach 0, because this is penalized score the scores are becoming more negative.
+```{r}
+pairwise.wilcox.test(knapPI_20_allP$non_neg, knapPI_20_allP$X1)
+```
 
+##Results
+In the boxplot the first three mutation rates appear to have a small upward trend of scores across the mutation rates of 5%, 10% and 25%. The transition between 25% and 50% begins to show a downward trend that is continued as we transition to 100%.
+
+##Conclusion
+Between the boxplot and the Wilcoxon rank sum test we found that there is no statistically significant difference in the scoring of experiments run with mutation rates of 5%, 10%, and 25%. Even though the boxplot visually shows a slight improvement in the mean score from 5% to 25%, the Wilcoxon test shows no p-value below 0.55 and therefore there is no corroboration of an upward trend in score.
+
+There is, however, statistically significant differences between the aforementioned three mutation rates and the mutation rates of 50% and 100%. This is corroborated by both the boxplot and the Wilcoxon test with both a large visual difference as well as p-values much smaller than 0.05.
+
+There is also a statistically significant difference between the mutation rates 50% and 100%. This is apparent in the boxplot as well, and makes sense given that all of the values from the experiment with 100% mutation rate had a score of 0, was negative.
 
 ##Future Work
-We would like to test a finer mutation rate gradient between 25% and 100% to see when the decline in score begins to slope more harshly. We would like to replicate our process with larger item set knapsack problems as well.
+We would like to test a finer mutation rate gradient that shows the inherent trend across the entire dataset. Crucial information may be missing by having such large differences between mutation rates across the experiments. Future trials would involve having finer grained increments between mutation rates such as a 5% difference between all experiments. This change would more consistently show any trends that may not be apparent in the current dataset and would show where mutation rate begins to negatively affect the score. 
 
-<!--```{r,echo=FALSE}
-boxplot(knapPI_200_allP$X0.1 ~ knapPI_200_allP$X10, names=c("5%", "10%", "25%", "50%", "100%"), main="200 Items")
-```-->
+We would also like to test this on more knapsack problems with varying parameters. The key parameter to change would be the knapsack item size along with a consistent change in mutation rate based on that size. This may show that across knapsack item sizes that a general trend exists. 
+
+These changes would also maybe need to be fine tuned to show significant results. For example, perhaps a mutation rate increment of 5% does not show any inherent trend. In that case, we would drop the increment to a lower rate (such as 1%) to bring out the true nature of the dataset's trend.
+
 
